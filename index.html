@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLUEDO: The Tudor Mansion Mystery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   1. DESIGN SYSTEM & CUSTOM PROPERTIES
+   ========================================================================== */
+:root {
+  /* Surfaces */
+  --bg-mahogany: #120e0c;
+  --panel-walnut: #1c1613;
+  --panel-walnut-light: #261e1a;
+  --card-parchment: #f5ecd8;
+  --card-aged: #e4d5b7;
+  --board-hallway: #d8c8aa;
+  --board-hallway-alt: #cfc0a2;
+  --board-room: #2b221c;
+
+  /* Accents & Character Colors */
+  --brass-gold: #cfa349;
+  --brass-dark: #8c6a24;
+  --crimson-wax: #8f2424;
+  --emerald-felt: #266341;
+  --emerald-glow: rgba(38, 99, 65, 0.65);
+
+  --scarlet: #c53030;
+  --mustard: #d69e2e;
+  --white: #edf2f7;
+  --green: #2f855a;
+  --peacock: #2b6cb0;
+  --plum: #6b46c1;
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-serif: 'Lora', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Borders & Shadows */
+  --border-brass: 1px solid rgba(207, 163, 73, 0.35);
+  --shadow-deep: 0 12px 32px rgba(0, 0, 0, 0.75);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-mahogany);
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(207, 163, 73, 0.08) 0%, transparent 60%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 12px);
+  color: var(--card-parchment);
+  font-family: var(--font-serif);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   2. HEADER & NAVIGATION
+   ========================================================================== */
+header.top-bar {
+  background: linear-gradient(180deg, #1a1310 0%, var(--panel-walnut) 100%);
+  border-bottom: 2px solid var(--brass-dark);
+  padding: 0.65rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+  z-index: 20;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.brand h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--brass-gold);
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.brand span {
+  font-size: 0.85rem;
+  color: var(--card-aged);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.header-controls {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.btn {
+  background: linear-gradient(180deg, #332720 0%, #221914 100%);
+  color: var(--card-parchment);
+  border: 1px solid var(--brass-dark);
+  padding: 0.45rem 0.85rem;
+  border-radius: 4px;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--brass-gold);
+  background: linear-gradient(180deg, #42332a 0%, #2c211b 100%);
+  transform: translateY(-1px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #317a52 0%, var(--emerald-felt) 100%);
+  border-color: #48a873;
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #3b9162 0%, #2c734c 100%);
+  box-shadow: 0 0 12px rgba(72, 168, 115, 0.4);
+}
+
+.btn-danger {
+  background: linear-gradient(180deg, #a82b2b 0%, var(--crimson-wax) 100%);
+  border-color: #d64545;
+  color: #fff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: linear-gradient(180deg, #c23434 0%, #9e2828 100%);
+  box-shadow: 0 0 12px rgba(214, 69, 69, 0.4);
+}
+
+.btn-gold {
+  background: linear-gradient(180deg, #dfb55b 0%, #b58931 100%);
+  border-color: #f5d384;
+  color: #1a120b;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   3. 3-ZONE DESKTOP WORKSPACE LAYOUT
+   ========================================================================== */
+.workspace {
+  display: grid;
+  grid-template-columns: 58% 42%;
+  grid-template-rows: 1fr auto;
+  flex: 1;
+  max-width: 1680px;
+  width: 100%;
+  margin: 0 auto;
+  gap: 0.85rem;
+  padding: 0.85rem;
+}
+
+@media (max-width: 1120px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Zone: Envelope Banner + 14x14 Board + Action Bar + Case Log */
+.left-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Active Turn & Confidential Envelope Banner */
+.status-banner {
+  background: var(--panel-walnut);
+  border: var(--border-brass);
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-card);
+  gap: 1rem;
+}
+
+.turn-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.turn-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--brass-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: var(--font-display);
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  flex-shrink: 0;
+}
+
+.turn-details h2 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--brass-gold);
+  line-height: 1.2;
+}
+
+.turn-details p {
+  font-size: 0.82rem;
+  color: var(--card-aged);
+}
+
+.envelope-widget {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0.4rem 0.75rem;
+  border-radius: 5px;
+  border: 1px dashed rgba(207, 163, 73, 0.45);
+}
+
+.envelope-label {
+  text-align: right;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--card-aged);
+}
+
+.envelope-label strong {
+  display: block;
+  color: #e56b6b;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   4. 14x14 ARCHITECTURAL MANSION BLUEPRINT BOARD
+   ========================================================================== */
+.board-wrapper {
+  background: var(--panel-walnut);
+  border: 2px solid var(--brass-dark);
+  border-radius: 8px;
+  padding: 0.75rem;
+  box-shadow: var(--shadow-deep);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.mansion-board {
+  position: relative;
+  width: 100%;
+  max-width: 616px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
